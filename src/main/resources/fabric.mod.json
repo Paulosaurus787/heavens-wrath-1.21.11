@@ -1,0 +1,20 @@
+{
+	"schemaVersion": 1,
+	"id": "heavens_wrath",
+	"version": "${version}",
+	"name": "Heaven's Wrath",
+	"description": "Client-Mod: Wenn du einen Spieler tötest, kracht deine Waffe vom Himmel auf ihn herab. Menü: /killeffect oder Taste K. Battle Pass: alle 10 Kills ein neuer Effekt.",
+	"authors": ["Du"],
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": ["de.heavenswrath.HeavensWrathClient"]
+	},
+	"accessWidener": "heavens_wrath.accesswidener",
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
