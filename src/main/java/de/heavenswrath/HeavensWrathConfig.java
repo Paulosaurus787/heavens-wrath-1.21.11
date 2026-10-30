@@ -51,7 +51,7 @@ public final class HeavensWrathConfig {
 		SOUNDS.put("drachen_tod", SoundEvents.ENDER_DRAGON_DEATH);
 		SOUNDS.put("amboss", SoundEvents.ANVIL_LAND);
 		SOUNDS.put("warden", SoundEvents.WARDEN_SONIC_BOOM);
-		SOUNDS.put("dreizack", SoundEvents.TRIDENT_THUNDER);
+		SOUNDS.put("dreizack", sound(SoundEvents.TRIDENT_THUNDER));
 	}
 
 	/** Alle Kill-Effekte in Freischalt-Reihenfolge (Battle Pass: siehe {@link HeavensWrathPass}). */
@@ -97,6 +97,11 @@ public final class HeavensWrathConfig {
 	public static boolean koerperAufloesen = false;
 
 	private HeavensWrathConfig() {
+	}
+
+	/** Manche Sounds sind je nach Version ein SoundEvent oder ein Holder davon; beides wird zum SoundEvent. */
+	private static SoundEvent sound(Object o) {
+		return o instanceof net.minecraft.core.Holder<?> h ? (SoundEvent) h.value() : (SoundEvent) o;
 	}
 
 	/** Alle wählbaren Sound-Namen für das Menü. */

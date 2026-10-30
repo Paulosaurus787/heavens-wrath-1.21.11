@@ -91,10 +91,45 @@ public final class HeavensWrathPass {
 		HeavensWrathConfig.speichern();
 		for (Stufe s : STUFEN) {
 			if (vorher < s.kills() && HeavensWrathConfig.kills >= s.kills() && mc.player != null) {
-				mc.player.displayClientMessage(Component.literal("Battle Pass: " + s.name() + " freigeschaltet! ("
-						+ s.info() + ") Wähle ihn mit /killeffect oder Taste K.").withStyle(ChatFormatting.GOLD), false);
+				melde(mc, Component.literal("Battle Pass: " + s.name() + " freigeschaltet! ("
+						+ s.info() + ") Wähle ihn mit /killeffect oder Taste K.").withStyle(ChatFormatting.GOLD));
 				mc.player.playSound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
 			}
 		}
+	}
+
+	/** Schreibt eine Nachricht in deinen Chat (nur bei dir). */
+	private static void melde(Minecraft mc, Component nachricht) {
+		// <MELDEN>
+		// Der Name dieser Methode ändert sich zwischen Versionen; darum werden die bekannten Namen probiert.
+		Object chat = null;
+		try {
+			chat = mc.gui.getClass().getMethod("getChat").invoke(mc.gui);
+		} catch (Throwable ignored) {
+			// kein Chat-Objekt
+		}
+		if (versuche(mc.player, "sendSystemMessage", nachricht) || versuche(mc.player, "displayClientMessage", nachricht, false)
+				|| versuche(chat, "addClientSystemMessage", nachricht) || versuche(chat, "addMessage", nachricht)) {
+			return;
+		}
+		System.err.println("[Heaven's Wrath] Chat-Nachricht nicht möglich: " + nachricht.getString());
+		// </MELDEN>
+	}
+
+	private static boolean versuche(Object ziel, String name, Object... args) {
+		if (ziel == null) {
+			return false;
+		}
+		for (java.lang.reflect.Method m : ziel.getClass().getMethods()) {
+			if (m.getName().equals(name) && m.getParameterCount() == args.length) {
+				try {
+					m.invoke(ziel, args);
+					return true;
+				} catch (Throwable ignored) {
+					// nächste Variante
+				}
+			}
+		}
+		return false;
 	}
 }
